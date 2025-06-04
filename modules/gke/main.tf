@@ -136,12 +136,10 @@ resource "google_container_node_pool" "primary_nodes" {
 
   # Configuración de nodos
   node_config {
+    preemptible  = var.gke_preemptible    
     machine_type = var.machine_type
     disk_size_gb = var.disk_size_gb
-    disk_type    = "pd-standard"
-    
-    # Usar nodos preemptibles en dev para reducir costos
-    preemptible = var.preemptible
+    disk_type    = var.disk_type  
 
     # Service Account
     service_account = google_service_account.gke_service_account.email

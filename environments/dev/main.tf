@@ -92,6 +92,8 @@ module "gke" {
   max_node_count     = var.gke_max_nodes
   initial_node_count = var.gke_initial_nodes
   disk_size_gb       = var.gke_disk_size
+  disk_type          = var.gke_disk_type      
+  gke_preemptible    = var.gke_preemptible   
   
   depends_on = [module.vpc]
 }

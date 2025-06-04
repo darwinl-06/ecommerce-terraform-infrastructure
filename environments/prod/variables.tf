@@ -63,13 +63,13 @@ variable "gke_min_nodes" {
 variable "gke_max_nodes" {
   description = "Maximum number of nodes in the node pool"
   type        = number
-  default     = 10
+  default     = 5
 }
 
 variable "gke_initial_nodes" {
   description = "Initial number of nodes in the node pool"
   type        = number
-  default     = 5
+  default     = 3
 }
 
 variable "gke_disk_size" {
@@ -106,6 +106,12 @@ variable "gke_monitoring_service" {
   description = "Monitoring service for GKE"
   type        = string
   default     = "monitoring.googleapis.com/kubernetes"
+}
+
+variable "gke_preemptible" {
+  description = "Whether to use preemptible nodes for GKE"
+  type        = bool
+  default     = false
 }
 
 # Artifact Registry Configuration

@@ -17,7 +17,7 @@ resource "google_artifact_registry_repository_iam_member" "gke_reader" {
   repository = google_artifact_registry_repository.ecommerce_repo.name
   location   = google_artifact_registry_repository.ecommerce_repo.location
   role       = "roles/artifactregistry.reader"
-  member     = "serviceAccount:${var.project_id}-compute@developer.gserviceaccount.com"
+  member     = "serviceAccount:${data.google_project.current.number}-compute@developer.gserviceaccount.com"
 }
 
 # Service Account específico para CI/CD
@@ -57,4 +57,8 @@ resource "google_secret_manager_secret" "artifact_registry_key" {
 resource "google_secret_manager_secret_version" "artifact_registry_key" {
   secret      = google_secret_manager_secret.artifact_registry_key.id
   secret_data = base64decode(google_service_account_key.artifact_registry_key.private_key)
+}
+
+data "google_project" "current" {
+  project_id = var.project_id
 }

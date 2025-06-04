@@ -104,6 +104,7 @@ module "gke" {
   initial_node_count    = var.gke_initial_nodes
   disk_size_gb          = var.gke_disk_size
   disk_type             = var.gke_disk_type
+  gke_preemptible       = var.gke_preemptible
   
   # Security Configuration
   enable_workload_identity = var.enable_workload_identity

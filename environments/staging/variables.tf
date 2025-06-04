@@ -59,13 +59,13 @@ variable "gke_machine_type" {
 variable "gke_min_nodes" {
   description = "Minimum number of nodes in the node pool"
   type        = number
-  default     = 1
+  default     = 2
 }
 
 variable "gke_max_nodes" {
   description = "Maximum number of nodes in the node pool"
   type        = number
-  default     = 5
+  default     = 3
 }
 
 variable "gke_initial_nodes" {
@@ -113,6 +113,12 @@ variable "gke_monitoring_service" {
 # Artifact Registry Configuration
 variable "artifact_cleanup_dry_run" {
   description = "Whether cleanup policy is in dry run mode"
+  type        = bool
+  default     = false
+}
+
+variable "gke_preemptible" {
+  description = "Whether to use preemptible nodes for GKE"
   type        = bool
   default     = false
 }

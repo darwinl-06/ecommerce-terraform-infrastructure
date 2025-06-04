@@ -70,6 +70,18 @@ variable "disk_size_gb" {
   default     = 30
 }
 
+variable "disk_type" {
+  description = "Disk type for GKE nodes"
+  type        = string
+  default     = "pd-standard"
+}
+
+variable "gke_preemptible" {
+  description = "Whether to use preemptible nodes for GKE"
+  type        = bool
+  default     = false
+}
+
 variable "preemptible" {
   description = "Usar nodos preemptibles para reducir costos"
   type        = bool

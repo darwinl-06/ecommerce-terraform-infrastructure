@@ -63,13 +63,13 @@ variable "gke_min_nodes" {
 variable "gke_max_nodes" {
   description = "Maximum number of nodes in the node pool"
   type        = number
-  default     = 5
+  default     = 1
 }
 
 variable "gke_initial_nodes" {
   description = "Initial number of nodes in the node pool"
   type        = number
-  default     = 2
+  default     = 1
 }
 
 variable "gke_disk_size" {
@@ -82,6 +82,12 @@ variable "gke_disk_type" {
   description = "Disk type for GKE nodes"
   type        = string
   default     = "pd-standard"
+}
+
+variable "gke_preemptible" {
+  description = "Whether to use preemptible nodes for GKE"
+  type        = bool
+  default     = false
 }
 
 variable "enable_workload_identity" {
@@ -108,7 +114,6 @@ variable "gke_monitoring_service" {
   default     = "monitoring.googleapis.com/kubernetes"
 }
 
-# Artifact Registry Configuration
 variable "artifact_cleanup_dry_run" {
   description = "Whether cleanup policy should run in dry-run mode"
   type        = bool
