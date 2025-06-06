@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        terraform 'terraform'
-    }
-
     environment {
         GOOGLE_APPLICATION_CREDENTIALS = credentials('gcp-service-account-key')
         TF_VAR_project_id = 'proyecto-final-ingesoftv'
@@ -77,7 +73,7 @@ pipeline {
                 dir("environments/${env.TF_ENVIRONMENT}") {
                     bat '''
                     echo 🚀 Aplicando cambios...
-                    terraform apply tfplan
+                    terraform apply -auto-approve tfplan
                     '''
                 }
             }
@@ -93,15 +89,17 @@ pipeline {
                 }
             }
         }
-    }    post {
+    }
+
+    post {
         success {
             echo "✅ Pipeline completado exitosamente en ${env.TF_ENVIRONMENT}"
         }
-        
+
         failure {
             echo "❌ Pipeline falló en ${env.TF_ENVIRONMENT}"
         }
-        
+
         always {
             dir("environments/${env.TF_ENVIRONMENT}") {
                 bat 'if exist tfplan del tfplan'
