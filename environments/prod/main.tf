@@ -66,16 +66,9 @@ module "vpc" {
   vpc_name = "${var.project_name}-vpc-${local.environment}"
   
   # Subnet Configuration
-  subnet_cidr_range              = var.subnet_cidr_range
-  pods_secondary_range_name      = "pods-${local.environment}"
-  pods_secondary_range_cidr      = var.pods_secondary_range_cidr
-  services_secondary_range_name  = "services-${local.environment}"
-  services_secondary_range_cidr  = var.services_secondary_range_cidr
-  
-  # NAT Configuration
-  create_nat_gateway = var.create_nat_gateway
-  nat_router_name    = "${var.project_name}-router-${local.environment}"
-  nat_gateway_name   = "${var.project_name}-nat-${local.environment}"
+  subnet_cidr = var.subnet_cidr_range
+  pods_cidr   = var.pods_secondary_range_cidr
+  services_cidr = var.services_secondary_range_cidr
 }
 
 # GKE Module
@@ -87,32 +80,22 @@ module "gke" {
   environment = local.environment
   
   # Cluster Configuration
-  cluster_name     = "${var.project_name}-cluster-${local.environment}"
-  kubernetes_version = var.kubernetes_version
+  cluster_name = "${var.project_name}-cluster-${local.environment}"
   
   # Network Configuration
-  network_name    = module.vpc.vpc_name
-  subnet_name     = module.vpc.private_subnet_name
-  pods_range_name = module.vpc.pods_secondary_range_name
-  services_range_name = module.vpc.services_secondary_range_name
+  vpc_name            = module.vpc.vpc_name
+  subnet_name         = module.vpc.subnet_name
+  pods_range_name     = module.vpc.pods_range_name
+  services_range_name = module.vpc.services_range_name
   
   # Node Pool Configuration
-  node_pool_name         = "${var.project_name}-nodes-${local.environment}"
-  machine_type          = var.gke_machine_type
-  min_node_count        = var.gke_min_nodes
-  max_node_count        = var.gke_max_nodes
-  initial_node_count    = var.gke_initial_nodes
-  disk_size_gb          = var.gke_disk_size
-  disk_type             = var.gke_disk_type
-  gke_preemptible       = var.gke_preemptible
-  
-  # Security Configuration
-  enable_workload_identity = var.enable_workload_identity
-  enable_network_policy    = var.enable_network_policy
-  
-  # Logging and Monitoring
-  logging_service    = var.gke_logging_service
-  monitoring_service = var.gke_monitoring_service
+  machine_type       = var.gke_machine_type
+  min_node_count     = var.gke_min_nodes
+  max_node_count     = var.gke_max_nodes
+  initial_node_count = var.gke_initial_nodes
+  disk_size_gb       = var.gke_disk_size
+  disk_type          = var.gke_disk_type
+  preemptible        = var.gke_preemptible
   
   depends_on = [module.vpc]
 }
@@ -131,11 +114,6 @@ module "artifact_registry" {
   
   # Cleanup Policy
   cleanup_policy_dry_run = var.artifact_cleanup_dry_run
-  cleanup_keep_tag_prefixes = var.artifact_cleanup_keep_tags
-  cleanup_older_than = var.artifact_cleanup_older_than
-  
-  # CI/CD Service Account
-  cicd_service_account_id = "${var.project_name}-cicd-${local.environment}"
   
   depends_on = [module.gke]
 }

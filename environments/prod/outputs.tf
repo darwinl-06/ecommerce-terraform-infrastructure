@@ -9,14 +9,14 @@ output "vpc_id" {
   value       = module.vpc.vpc_id
 }
 
-output "private_subnet_name" {
-  description = "Name of the private subnet"
-  value       = module.vpc.private_subnet_name
+output "subnet_name" {
+  description = "Name of the subnet"
+  value       = module.vpc.subnet_name
 }
 
-output "nat_gateway_name" {
-  description = "Name of the NAT gateway"
-  value       = module.vpc.nat_gateway_name
+output "subnet_id" {
+  description = "ID of the subnet"
+  value       = module.vpc.subnet_id
 }
 
 # GKE Outputs
@@ -44,7 +44,7 @@ output "kubeconfig_command" {
 
 output "workload_identity_service_account" {
   description = "Workload Identity service account email"
-  value       = module.gke.workload_identity_service_account_email
+  value       = module.gke.service_account_email
 }
 
 # Artifact Registry Outputs

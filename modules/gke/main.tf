@@ -216,8 +216,8 @@ resource "kubernetes_namespace" "ecommerce" {
 resource "kubernetes_service_account" "workload_identity" {
   metadata {
     name      = "ecommerce-workload-identity"
-    namespace = kubernetes_namespace.ecommerce.metadata[0].name
-    
+    namespace = "ecommerce"
+
     annotations = {
       "iam.gke.io/gcp-service-account" = google_service_account.gke_service_account.email
     }
