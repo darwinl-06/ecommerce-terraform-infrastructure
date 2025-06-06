@@ -63,7 +63,7 @@ variable "gke_min_nodes" {
 variable "gke_max_nodes" {
   description = "Maximum number of nodes in the node pool"
   type        = number
-  default     = 1
+  default     = 2
 }
 
 variable "gke_initial_nodes" {
@@ -75,7 +75,7 @@ variable "gke_initial_nodes" {
 variable "gke_disk_size" {
   description = "Disk size in GB for GKE nodes"
   type        = number
-  default     = 50
+  default     = 32
 }
 
 variable "gke_disk_type" {
@@ -87,7 +87,7 @@ variable "gke_disk_type" {
 variable "gke_preemptible" {
   description = "Whether to use preemptible nodes for GKE"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "enable_workload_identity" {
@@ -123,11 +123,11 @@ variable "artifact_cleanup_dry_run" {
 variable "artifact_cleanup_keep_tags" {
   description = "Tag prefixes to keep during cleanup"
   type        = list(string)
-  default     = ["latest", "main", "dev"]
+  default     = ["latest", "main", "dev", "develop"]
 }
 
 variable "artifact_cleanup_older_than" {
   description = "Delete images older than this duration"
   type        = string
-  default     = "2592000s" # 30 days
+  default     = "1296000s" # 30 days
 }
