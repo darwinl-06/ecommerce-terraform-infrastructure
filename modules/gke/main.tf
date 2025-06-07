@@ -198,25 +198,18 @@ resource "google_container_node_pool" "primary_nodes" {
   ]
 }
 
-# Namespace para ecommerce
+# Namespace de Kubernetes para ecommerce
 resource "kubernetes_namespace" "ecommerce" {
   metadata {
     name = "ecommerce"
-    
-    labels = {
-      name        = "ecommerce"
-      environment = var.environment
-    }
   }
-
-  depends_on = [google_container_cluster.primary]
 }
 
 # Service Account de Kubernetes para workload identity
 resource "kubernetes_service_account" "workload_identity" {
   metadata {
     name      = "ecommerce-workload-identity"
-    namespace = "ecommerce"
+    namespace = kubernetes_namespace.ecommerce.metadata[0].name
 
     annotations = {
       "iam.gke.io/gcp-service-account" = google_service_account.gke_service_account.email
