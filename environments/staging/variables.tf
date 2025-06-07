@@ -59,7 +59,7 @@ variable "gke_machine_type" {
 variable "gke_min_nodes" {
   description = "Minimum number of nodes in the node pool"
   type        = number
-  default     = 2
+  default     = 1
 }
 
 variable "gke_max_nodes" {
@@ -71,13 +71,13 @@ variable "gke_max_nodes" {
 variable "gke_initial_nodes" {
   description = "Initial number of nodes in the node pool"
   type        = number
-  default     = 2
+  default     = 1
 }
 
 variable "gke_disk_size" {
   description = "Disk size for GKE nodes (GB)"
   type        = number
-  default     = 50
+  default     = 32
 }
 
 variable "gke_disk_type" {
@@ -120,7 +120,7 @@ variable "artifact_cleanup_dry_run" {
 variable "gke_preemptible" {
   description = "Whether to use preemptible nodes for GKE"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "artifact_cleanup_keep_tags" {

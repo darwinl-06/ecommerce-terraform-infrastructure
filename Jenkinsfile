@@ -55,16 +55,19 @@ pipeline {
         }
 
         stage('Approve Staging') {
-            when { branch 'stage' }
+            when { branch 'stage'; branch 'master'; branch 'dev' }
             steps {
+                emailext(
+                    to: '$DEFAULT_RECIPIENTS',
+                    subject: "Action Required: Approval Needed for Deploy of Infraestructure #${env.BUILD_NUMBER}",
+                    body: """\
+                    The build #${env.BUILD_NUMBER} for branch *${env.BRANCH_NAME}* has completed and is pending approval for deployment.
+                    Please review the changes and approve or abort
+                    You can access the build details here:
+                    ${env.BUILD_URL}
+                    """
+                )
                 input message: '¿Aplicar cambios en Staging?', ok: 'Aplicar'
-            }
-        }
-
-        stage('Approve Production') {
-            when { branch 'master' }
-            steps {
-                input message: '¿Aplicar cambios en Producción?', ok: 'Aplicar'
             }
         }
 
