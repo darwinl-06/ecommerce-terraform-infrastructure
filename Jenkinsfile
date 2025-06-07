@@ -37,7 +37,7 @@ pipeline {
                 dir("environments/${env.TF_ENVIRONMENT}") {
                     bat '''
                     echo 🔧 Inicializando Terraform...
-                    terraform init
+                    terraform init -upgrade
                     '''
                 }
             }
