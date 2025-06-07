@@ -82,19 +82,19 @@ pipeline {
 //             }
 //         }
 
-        stages {
-            stage('Authenticate to GCP') {
-                steps {
-                    withCredentials([file(credentialsId: 'gcp-service-account-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
-                        sh '''
-                        echo "🔐 Activando cuenta de servicio..."
-                        gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
-                        gcloud config set project $TF_VAR_project_id
-                        '''
-                    }
+
+        stage('Authenticate to GCP') {
+            steps {
+                withCredentials([file(credentialsId: 'gcp-service-account-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+                    sh '''
+                    echo "🔐 Activando cuenta de servicio..."
+                    gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
+                    gcloud config set project $TF_VAR_project_id
+                    '''
                 }
             }
         }
+
 
         stage('Get GKE Credentials') {
             steps {
