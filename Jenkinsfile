@@ -5,6 +5,7 @@ pipeline {
         GOOGLE_APPLICATION_CREDENTIALS = credentials('gcp-service-account-key')
         TF_VAR_project_id = 'proyecto-final-ingesoftv'
         TF_LOG = 'INFO'
+        PATH = "C:\\Program Files (x86)\\Google\\Cloud SDK\\google-cloud-sdk\\bin;${env.PATH}"
     }
 
     stages {
