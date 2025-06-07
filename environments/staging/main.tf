@@ -1,18 +1,19 @@
 # Staging Environment Configuration
 terraform {
-  required_version = ">= 1.0"
+  required_version = ">= 1.3.0"
+
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = "~> 4.84"
+      version = ">= 5.20.0"
     }
     google-beta = {
       source  = "hashicorp/google-beta"
-      version = "~> 4.84"
+      version = ">= 5.20.0"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "~> 2.23"
+      version = ">= 2.23.0"
     }
   }
   
@@ -80,6 +81,7 @@ module "vpc" {
 
 # GKE Module
 module "gke" {
+
   source = "../../modules/gke"
   
   project_id  = var.project_id
@@ -88,32 +90,22 @@ module "gke" {
   
   # Cluster Configuration
   cluster_name     = "${var.project_name}-cluster-${local.environment}"
-  kubernetes_version = var.kubernetes_version
-  
+
   # Network Configuration
-  network_name    = module.vpc.vpc_name
-  subnet_name     = module.vpc.private_subnet_name
-  pods_range_name = module.vpc.pods_secondary_range_name
-  services_range_name = module.vpc.services_secondary_range_name
+  vpc_name            = module.vpc.vpc_name
+  subnet_name         = module.vpc.subnet_name
+  pods_range_name     = module.vpc.pods_range_name
+  services_range_name = module.vpc.services_range_name
   
   # Node Pool Configuration
-  node_pool_name         = "${var.project_name}-nodes-${local.environment}"
   machine_type          = var.gke_machine_type
   min_node_count        = var.gke_min_nodes
   max_node_count        = var.gke_max_nodes
   initial_node_count    = var.gke_initial_nodes
   disk_size_gb          = var.gke_disk_size
   disk_type             = var.gke_disk_type
-  gke_preemptible       = var.gke_preemptible
+  preemptible       = var.gke_preemptible
 
-  # Security Configuration
-  enable_workload_identity = var.enable_workload_identity
-  enable_network_policy    = var.enable_network_policy
-  
-  # Logging and Monitoring
-  logging_service    = var.gke_logging_service
-  monitoring_service = var.gke_monitoring_service
-  
   depends_on = [module.vpc]
 }
 
@@ -131,8 +123,6 @@ module "artifact_registry" {
   
   # Cleanup Policy
   cleanup_policy_dry_run = var.artifact_cleanup_dry_run
-  cleanup_keep_tag_prefixes = var.artifact_cleanup_keep_tags
-  cleanup_older_than = var.artifact_cleanup_older_than
   
   # CI/CD Service Account
   cicd_service_account_id = "${var.project_name}-cicd-${local.environment}"

@@ -1,18 +1,19 @@
 # Production Environment Configuration
 terraform {
-  required_version = ">= 1.0"
+  required_version = ">= 1.3.0"
+
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = "~> 4.84"
+      version = ">= 5.20.0"
     }
     google-beta = {
       source  = "hashicorp/google-beta"
-      version = "~> 4.84"
+      version = ">= 5.20.0"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "~> 2.23"
+      version = ">= 2.23.0"
     }
   }
   
