@@ -8,7 +8,6 @@ pipeline {
     }
 
     stages {
-
         stage('Setup') {
             steps {
                 script {
@@ -69,7 +68,9 @@ pipeline {
                 )
                 input message: '¿Aplicar cambios en Staging?', ok: 'Aplicar'
             }
-        }        stage('Terraform Apply') {
+        }
+
+        stage('Terraform Apply') {
             steps {
                 dir("environments/${env.TF_ENVIRONMENT}") {
                     bat '''
