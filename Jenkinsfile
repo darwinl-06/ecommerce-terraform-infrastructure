@@ -69,15 +69,27 @@ pipeline {
                 )
                 input message: '¿Aplicar cambios en Staging?', ok: 'Aplicar'
             }
-        }
-
-        stage('Terraform Apply') {
+        }        stage('Terraform Apply') {
             steps {
                 dir("environments/${env.TF_ENVIRONMENT}") {
                     bat '''
                     echo 🚀 Aplicando cambios...
                     terraform apply -auto-approve tfplan
                     '''
+                }
+            }
+        }
+
+        stage('Get GKE Credentials') {
+            steps {
+                script {
+                    def clusterName = "ecommerce-cluster-${env.TF_ENVIRONMENT}"
+                    def zone = env.TF_ENVIRONMENT == 'prod' ? 'us-central1' : 'us-central1-a'
+                    
+                    bat """
+                    echo 🔐 Obteniendo credenciales del cluster GKE...
+                    gcloud container clusters get-credentials ${clusterName} --zone ${zone} --project ${env.TF_VAR_project_id}
+                    """
                 }
             }
         }
