@@ -54,7 +54,7 @@ pipeline {
             }
         }
 
-        stage('Approve Staging') {
+        stage('Approve Deploy') {
             when { branch 'stage'; branch 'master'; branch 'dev' }
             steps {
                 emailext(
