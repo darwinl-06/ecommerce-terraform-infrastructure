@@ -25,6 +25,8 @@ resource "google_container_cluster" "primary" {
   name     = var.cluster_name
   location = var.region
 
+  deletion_protection = false
+
   # Configuración de red
   network    = var.vpc_name
   subnetwork = var.subnet_name
