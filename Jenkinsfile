@@ -71,16 +71,16 @@ pipeline {
             }
         }
 
-//         stage('Terraform Apply') {
-//             steps {
-//                 dir("environments/${env.TF_ENVIRONMENT}") {
-//                     bat '''
-//                     echo 🚀 Aplicando cambios...
-//                     terraform apply -auto-approve tfplan
-//                     '''
-//                 }
-//             }
-//         }
+        stage('Terraform Apply') {
+            steps {
+                dir("environments/${env.TF_ENVIRONMENT}") {
+                    bat '''
+                    echo 🚀 Aplicando cambios...
+                    terraform apply -auto-approve tfplan
+                    '''
+                }
+            }
+        }
 
         stage('Authenticate to GCP') {
             steps {
