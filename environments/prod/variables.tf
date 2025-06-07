@@ -51,37 +51,37 @@ variable "kubernetes_version" {
 variable "gke_machine_type" {
   description = "Machine type for GKE nodes"
   type        = string
-  default     = "e2-standard-4"
+  default     = "e2-medium"
 }
 
 variable "gke_min_nodes" {
   description = "Minimum number of nodes in the node pool"
   type        = number
-  default     = 3
+  default     = 1
 }
 
 variable "gke_max_nodes" {
   description = "Maximum number of nodes in the node pool"
   type        = number
-  default     = 5
+  default     = 3
 }
 
 variable "gke_initial_nodes" {
   description = "Initial number of nodes in the node pool"
   type        = number
-  default     = 3
+  default     = 1
 }
 
 variable "gke_disk_size" {
   description = "Disk size in GB for GKE nodes"
   type        = number
-  default     = 100
+  default     = 32
 }
 
 variable "gke_disk_type" {
   description = "Disk type for GKE nodes"
   type        = string
-  default     = "pd-ssd"
+  default     = "pd-standard"
 }
 
 variable "enable_workload_identity" {
@@ -111,7 +111,7 @@ variable "gke_monitoring_service" {
 variable "gke_preemptible" {
   description = "Whether to use preemptible nodes for GKE"
   type        = bool
-  default     = false
+  default     = true
 }
 
 # Artifact Registry Configuration
