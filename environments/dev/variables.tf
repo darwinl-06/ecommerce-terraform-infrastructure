@@ -51,7 +51,7 @@ variable "kubernetes_version" {
 variable "gke_machine_type" {
   description = "Machine type for GKE nodes"
   type        = string
-  default     = "e2-medium"
+  default     = "e2-standard-2"
 }
 
 variable "gke_min_nodes" {
@@ -63,7 +63,7 @@ variable "gke_min_nodes" {
 variable "gke_max_nodes" {
   description = "Maximum number of nodes in the node pool"
   type        = number
-  default     = 2
+  default     = 3
 }
 
 variable "gke_initial_nodes" {

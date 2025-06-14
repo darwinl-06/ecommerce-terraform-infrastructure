@@ -61,13 +61,13 @@ variable "max_node_count" {
 variable "machine_type" {
   description = "Tipo de máquina para los nodos"
   type        = string
-  default     = "e2-medium"
+  default     = "e2-standard-2"
 }
 
 variable "disk_size_gb" {
   description = "Tamaño del disco en GB"
   type        = number
-  default     = 30
+  default     = 32
 }
 
 variable "disk_type" {
