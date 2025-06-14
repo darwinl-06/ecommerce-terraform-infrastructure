@@ -123,61 +123,70 @@ alertmanager:
         repeat_interval: 1h
     
     receivers:
-    - name: 'default-receiver'
-      email_configs:
-        - to: 'darwinlenis.06@gmail.com'
-          headers:
-            subject: '[ECOMMERCE] {{ .GroupLabels.alertname }} - {{ .GroupLabels.severity }}'
-          text: |
-            🚨 ALERT: {{ .GroupLabels.alertname }}
-            
-            Deployment: {{ .GroupLabels.deployment }}
-            Severity: {{ .GroupLabels.severity }}
-            Namespace: {{ .GroupLabels.namespace }}
-            
-            Description: {{ range .Alerts }}{{ .Annotations.description }}{{ end }}
-            
-            Time: {{ .StartsAt }}
-            
-            Dashboard: http://localhost:3000
+      - name: 'default-receiver'
+        email_configs:
+          - to: 'jumadrid005@gmail.com'
+            headers:
+              subject: '[ECOMMERCE] {{ (index .Alerts 0).Labels.alertname }} - {{ (index .Alerts 0).Labels.severity }}'
+            text: |
+              🚨 ALERT
 
-    - name: 'critical-receiver'
-      email_configs:
-        - to: 'darwinlenis.06@gmail.com'
-          headers:
-            subject: '🚨 CRITICAL: {{ .GroupLabels.alertname }}'
-          text: |
-            🚨🚨 CRITICAL ALERT 🚨🚨
-            
-            Alert: {{ .GroupLabels.alertname }}
-            Deployment: {{ .GroupLabels.deployment }}
-            Namespace: {{ .GroupLabels.namespace }}
-            
-            ⚠️ IMMEDIATE ACTION REQUIRED ⚠️
-            
-            Description: {{ range .Alerts }}{{ .Annotations.description }}{{ end }}
-            
-            Started: {{ .StartsAt }}
-            
-            Grafana: http://localhost:3000
-            Prometheus: http://localhost:9090
+              {{ range .Alerts }}
+              Alert: {{ .Labels.alertname }}
+              Deployment: {{ .Labels.deployment }}
+              Namespace: {{ .Labels.namespace }}
 
-    - name: 'warning-receiver'
-      email_configs:
-        - to: 'darwinlenis.06@gmail.com'
-          headers:
-            subject: '⚠️ WARNING: {{ .GroupLabels.alertname }}'
-          text: |
-            ⚠️ Warning Alert
-            
-            Alert: {{ .GroupLabels.alertname }}
-            Deployment: {{ .GroupLabels.deployment }}
-            Severity: {{ .GroupLabels.severity }}
-            
-            Description: {{ range .Alerts }}{{ .Annotations.description }}{{ end }}
-            
-            Time: {{ .StartsAt }}
+              Description: {{ .Annotations.description }}
+              Time: {{ .StartsAt }}
 
+              ----------------------------------------
+              {{ end }}
+
+              Dashboard: http://localhost:3000
+
+      - name: 'critical-receiver'
+        email_configs:
+          - to: 'jumadrid005@gmail.com'
+            headers:
+              subject: '🚨 CRITICAL: {{ (index .Alerts 0).Labels.alertname }}'
+            text: |
+              🚨🚨 CRITICAL ALERT 🚨🚨
+
+              {{ range .Alerts }}
+              Alert: {{ .Labels.alertname }}
+              Deployment: {{ .Labels.deployment }}
+              Namespace: {{ .Labels.namespace }}
+
+              ⚠️ IMMEDIATE ACTION REQUIRED ⚠️
+
+              Description: {{ .Annotations.description }}
+              Started: {{ .StartsAt }}
+
+              ----------------------------------------
+              {{ end }}
+
+              Grafana: http://localhost:3000
+              Prometheus: http://localhost:9090
+
+      - name: 'warning-receiver'
+        email_configs:
+          - to: 'jumadrid005@gmail.com'
+            headers:
+              subject: '⚠️ WARNING: {{ (index .Alerts 0).Labels.alertname }}'
+            text: |
+              ⚠️ Warning Alert
+
+              {{ range .Alerts }}
+              Alert: {{ .Labels.alertname }}
+              Deployment: {{ .Labels.deployment }}
+              Severity: {{ .Labels.severity }}
+              Namespace: {{ .Labels.namespace }}
+
+              Description: {{ .Annotations.description }}
+              Time: {{ .StartsAt }}
+
+              ----------------------------------------
+              {{ end }}
 
 # Node Exporter para métricas del sistema
 nodeExporter:
