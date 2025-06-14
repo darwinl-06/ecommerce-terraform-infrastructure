@@ -108,6 +108,69 @@ pipeline {
             }
         }
 
+        stage('Ensure Namespace') {
+            steps {
+                bat "kubectl get namespace monitoring || kubectl create namespace monitoring"
+                bat "kubectl get namespace logging || kubectl create namespace logging"
+            }
+        }
+
+        stage('Deploy Observability Stack') {
+            when { branch 'master' }
+            steps {
+                bat '''
+                    echo "📊 Deploying Prometheus and Grafana with ..."
+
+                    helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+                    helm repo update
+
+                    helm upgrade --install prometheus-stack prometheus-community/kube-prometheus-stack ^
+                    --namespace monitoring --create-namespace ^
+                    -f modules/monitoring/values.yaml
+                 
+                    echo "✅ Observability stack deployed successfully!"
+                '''
+            }
+        }
+
+        stage('Deploy ELK Stack') {
+            when { branch 'master' }
+            steps {
+                bat '''
+                    echo "📊 Deploying ELK Stack (Elasticsearch, Logstash, Kibana) and Filebeat..."
+
+                    helm repo add elastic https://helm.elastic.co
+                    helm repo update
+
+                    echo "📦 Deploying Elasticsearch..."
+                    helm upgrade --install elasticsearch elastic/elasticsearch ^
+                    --namespace logging --create-namespace ^
+                    -f modules/monitoring/elasticsearch-values.yaml
+
+                    echo "⏳ Waiting for Elasticsearch to be ready..."
+                    kubectl wait --for=condition=Ready pod -l app=elasticsearch-master ^
+                    --namespace logging --timeout=600s
+
+                    echo "📦 Deploying Logstash..."
+                    helm upgrade --install logstash elastic/logstash ^
+                    --namespace logging ^
+                    -f modules/monitoring/logstash-values.yaml
+
+                    echo "📦 Deploying Kibana..."
+                    helm upgrade --install kibana elastic/kibana ^
+                    --namespace logging ^
+                    -f modules/monitoring/kibana-values.yaml
+
+                    echo "📦 Deploying Filebeat..."
+                    helm upgrade --install filebeat elastic/filebeat ^
+                    --namespace logging ^
+                    -f modules/monitoring/filebeat-values.yaml
+
+                    echo "✅ ELK Stack and Filebeat deployed successfully!"
+                '''
+            }
+        }
+
         stage('Show Outputs') {
             steps {
                 dir("environments/${env.TF_ENVIRONMENT}") {
