@@ -53,7 +53,7 @@ variable "kubernetes_version" {
 variable "gke_machine_type" {
   description = "Machine type for GKE nodes"
   type        = string
-  default     = "e2-standard-2"
+  default     = "e2-standard-4"
 }
 
 variable "gke_min_nodes" {
