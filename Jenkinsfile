@@ -55,7 +55,13 @@ pipeline {
         }
 
         stage('Approve Deploy') {
-            when { branch 'stage'; branch 'master'; branch 'dev' }
+            when {
+                anyOf {
+                    branch 'stage'
+                    branch 'master'
+                    branch 'dev'
+                }
+            }
             steps {
                 emailext(
                     to: '$DEFAULT_RECIPIENTS',
